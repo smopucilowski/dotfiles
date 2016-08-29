@@ -14,6 +14,9 @@ set smartcase     " when searching, ignore case unless search contains upcas
 set number        " line numbers in front of each line
 set ruler         " some nice information in footer
 
+set splitright    " open split planes to the right and bottom,
+set splitbelow    " which feels more natural
+
 nnoremap Q <nop>  " disable Ex mode
 
 " Switch syntax highlighting on, when the terminal has colours
