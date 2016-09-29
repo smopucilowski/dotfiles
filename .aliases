@@ -1,5 +1,8 @@
 # Pretty print the path
 alias path='echo $PATH | tr -s ":" "\n"'
 
+# Coloured output
+alias ip='ip -c'
+
 # Include custom aliases
 [[ -f ~/.aliases.local ]] && source ~/.aliases.local
