@@ -1,6 +1,8 @@
 set enc=utf-8
 set fileencoding=utf-8
 
+set nocompatible  " enter the current millenium
+
 set shiftwidth=4  " operation >> indents 4 cols, << unindents 4 cols
 set tabstop=4     " a hard \t displays as 4 columns
 set expandtab     " insert spaces when pressing tab
