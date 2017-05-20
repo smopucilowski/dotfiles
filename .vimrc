@@ -19,6 +19,9 @@ set ruler         " some nice information in footer
 set splitright    " open split planes to the right and bottom,
 set splitbelow    " which feels more natural
 
+set path+=**      " search into subfolders when tab-completing
+set wildmenu      " display matching files when we tab complete
+
 nnoremap Q <nop>  " disable Ex mode
 
 " Switch syntax highlighting on, when the terminal has colours
