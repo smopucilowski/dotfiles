@@ -1,0 +1,81 @@
+#!/usr/bin/env bash
+# Modified from https://github.com/twolfson/sexy-bash-prompt/blob/master/.bash_prompt
+ESC='\033'
+BEL=$(tput bel)
+
+# If we are on a coloured terminal
+if tput setaf 1 &> /dev/null; then
+    # Reset the shell from the above `if` check
+    tput sgr0 &> /dev/null
+
+    prompt_bold="$(tput bold)"
+    prompt_reset="$(tput sgr0)"
+    peompr_underline="$(tput sgr 0 1)"
+
+    # If the terminal supports at least 256 colors
+    if [[ "$(tput colors)" -ge 256 ]] &> /dev/null; then
+        prompt_white="$prompt_bold$(tput setaf 7)"
+        prompt_red="$prompt_bold$(tput setaf 9)"
+        prompt_green="$prompt_bold$(tput setaf 76)"
+        prompt_blue="$prompt_bold$(tput setaf 27)"
+    # otherwise use 8 bit colours
+    else
+        prompt_white="$prompt_bold$(tput setaf 7)"
+        prompt_red="$prompt_bold$(tput setaf 1)"
+        prompt_green="$prompt_bold$(tput setaf 2)"
+        prompt_blue="$prompt_bold$(tput setaf 4)"
+    fi
+# otherwise use ANSI escape sequences
+else
+    prompt_reset="${ESC}[m"
+    prompt_white="${ESC}[1;37m"
+    prompt_red="${ESC}[1;31m"
+    prompt_green="${ESC}[1;32m"
+    prompt_blue="${ESC}[1;34m"
+fi
+
+function prompt_get_git_branch() {
+    # On branches, this returns the branch name
+    ref="$(git symbolic-ref HEAD 2> /dev/null | sed -e 's/refs\/heads\///')"
+    if [[ "$ref" != "" ]]; then
+        echo "$ref"
+    else
+        echo "(no branch)"
+    fi
+}
+
+# Window title of X terminals
+function prompt_window_title() {
+    echo "${ESC}]0;\u@\h:\w${BEL}"
+}
+
+function prompt_headline() {
+    if [[ ${EUID} -eq 0 ]]; then
+        echo "$prompt_red\u@\h$prompt_reset $prompt_blue\w$prompt_reset"
+    else
+        echo "$prompt_green\u@\h$prompt_reset $prompt_blue\w$prompt_reset"
+    fi
+}
+
+function prompt_exit_status() {
+    token='\$'
+    #token="→"
+    if [[ "$return_value" -eq 0 ]]; then
+        output="$prompt_white$token$prompt_reset"
+    else
+        output="$prompt_red($return_value) $token$prompt_reset"
+    fi
+    echo "$output"
+}
+
+function prompt_command() {
+    export return_value=$?
+    export PS1="\
+$(prompt_window_title)\
+$(prompt_headline)\
+\n\
+$(prompt_exit_status) \
+$prompt_reset"
+}
+
+export PROMPT_COMMAND=prompt_command
